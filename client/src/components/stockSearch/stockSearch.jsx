@@ -31,7 +31,7 @@ function Stock() {
       );
       setStockTickers(response.data.tickers);
     } catch (err) {
-      console.log("get stock ticker", err);
+      console.log("Stock Ticker error", err);
     }
   }
 
@@ -70,7 +70,7 @@ function Stock() {
     <div className="container text-center mb-4">
       <h2 className="p-3">
         {chosenStock.length === 1 ? chosenStock[0].ticker : ""} <br />$
-        {chosenStock.length === 1 ? chosenStock[0].day.c : "0"}
+        {chosenStock.length === 1 ? chosenStock[0].day.c.toFixed(2) : "0"}
       </h2>
       <SearchBox
         className="stock-search"
