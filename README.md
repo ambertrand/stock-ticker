@@ -6,3 +6,4 @@
 - Assume a single user of this app for past activity
 - Be able to look up current prices for a given stock symbol
 - If you can deliver us a github repo that'll do fine. No deployed url needed.
+- Note: Snapshot data is cleared at 3:30am EST and gets populated as data is received from the exchanges. This can happen as early as 4am EST.
