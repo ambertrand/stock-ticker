@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Card from "../pastActivityCard/pastActivityCard";
 
 function PastActivity() {
+  const [prevActivity, setPreviousActivty] = useState([]);
+
+  useEffect(() => {
+    previousStockActivity();
+  }, []);
+
+  async function previousStockActivity() {
+    await axios.get("http://localhost:3001/api/stocks").then((res) => {
+      setPreviousActivty(res.data);
+    });
+  }
+
   return (
     <div className="container">
-      <h3>Previous Activity</h3>
-      <div>Lorem, ipsum.</div>
-      <div>Lorem, ipsum.</div>
+      <h2>Previous Activity</h2>
+      <div className="card-list">
+        {prevActivity.map((item) => {
+          return <Card item={item} key={item._id} />;
+        })}
+      </div>
     </div>
   );
 }
