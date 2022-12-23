@@ -5,6 +5,13 @@ import SearchBox from "../searchBox/searchBox";
 function Stock() {
   // const apiKey = process.env.API_KEY;
   let searchFieldString = "";
+  let testObj = {
+    ticket: "AL",
+    price: 10,
+    amount: 3,
+    total: 30,
+    buy: false,
+  };
 
   const [stockTickers, setStockTickers] = useState();
   const [chosenStock, setChosenStock] = useState([]);
@@ -26,12 +33,16 @@ function Stock() {
     }
   }
 
+  async function stockSubmit() {
+    await axios.post("http://localhost:3001", testObj);
+    console.log("POST successful");
+  }
+
   const onSearchChange = (e) => {
     searchFieldString = e.target.value.toLowerCase();
   };
 
-  const onSearchSubmit = (e) => {
-    // console.log("clicked");
+  const onSearchSubmit = () => {
     const matchingSearchStock = stockTickers.filter(
       (stockTicker) => stockTicker.ticker.toLowerCase() === searchFieldString
     );
@@ -66,7 +77,9 @@ function Stock() {
           <label>Sell</label>
         </div>
       </div>
-      <button type="submit">Calculate</button>
+      <button type="submit" onClick={stockSubmit}>
+        Calculate
+      </button>
     </div>
   );
 }
