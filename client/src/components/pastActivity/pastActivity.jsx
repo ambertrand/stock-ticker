@@ -14,14 +14,13 @@ function PastActivity() {
       setPreviousActivty(res.data);
     });
   }
-  console.log(prevActivity);
 
   return (
     <div className="container">
       <h2>Previous Activity</h2>
       <div className="card-list">
         {prevActivity.map((item) => {
-          return <Card item={item} />;
+          return <Card item={item} key={item._id} />;
         })}
       </div>
     </div>

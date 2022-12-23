@@ -4,17 +4,21 @@ import SearchBox from "../searchBox/searchBox";
 
 function Stock() {
   // const apiKey = process.env.API_KEY;
+
   let searchFieldString = "";
-  let testObj = {
-    ticket: "AL",
-    price: 10,
-    amount: 3,
-    total: 30,
-    buy: false,
-  };
+  // let testObj = {
+  //   ticket: "AL",
+  //   price: 10,
+  //   amount: 3,
+  //   total: 30,
+  //   buy: false,
+  // };
 
   const [stockTickers, setStockTickers] = useState();
   const [chosenStock, setChosenStock] = useState([]);
+  const [purchasePrice, setPurchasePrice] = useState(0);
+  const [radioBtns, setRadioBtns] = useState("Buy");
+  const [isBuyOrder, setIsBuyOrder] = useState();
 
   useEffect(() => {
     getStockTickers();
@@ -25,8 +29,6 @@ function Stock() {
       const response = await axios.get(
         "https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=GqbklxOcTstEWTflxlxWpXWtnVj4IzjU"
       );
-      console.log("initial", response);
-      console.log("response", response.data.tickers);
       setStockTickers(response.data.tickers);
     } catch (err) {
       console.log("get stock ticker", err);
@@ -34,20 +36,35 @@ function Stock() {
   }
 
   async function stockSubmit() {
-    await axios.post("http://localhost:3001", testObj);
-    console.log("POST successful");
+    await axios.post("http://localhost:3001/api/stocks", {
+      ticket: chosenStock[0].ticker,
+      price: chosenStock[0].day.c,
+      amount: purchasePrice,
+      total: purchasePrice * chosenStock[0].day.c,
+      buy: isBuyOrder,
+    });
   }
 
   const onSearchChange = (e) => {
     searchFieldString = e.target.value.toLowerCase();
   };
 
-  const onSearchSubmit = () => {
+  const onSearch = () => {
     const matchingSearchStock = stockTickers.filter(
       (stockTicker) => stockTicker.ticker.toLowerCase() === searchFieldString
     );
     setChosenStock(matchingSearchStock);
   };
+
+  const onAmountChange = (e) => {
+    const amount = e.target.value;
+    setPurchasePrice(amount);
+  };
+
+  function radioBtnCheck(e) {
+    setRadioBtns(e.target.value);
+    e.target.value === "Buy" ? setIsBuyOrder(true) : setIsBuyOrder(false);
+  }
 
   return (
     <div className="container text-center mb-4">
@@ -60,25 +77,38 @@ function Stock() {
         placeholder="Search Stock"
         onChangeHandler={onSearchChange}
       />
-      <button type="submit" onClick={onSearchSubmit}>
-        Submit
+      <button type="submit" onClick={onSearch}>
+        Search Stock Price
       </button>
       <div className="amount-wrapper">
         <div className="amount-btns">
-          <input type="search" placeholder="Amount" />
-          <label></label>
+          <input type="search" placeholder="Amount" onChange={onAmountChange} />
         </div>
-        <div className="buy-btn">
-          <input type="radio" id="buy" name="Buy stock" value="text" />
-          <label>Buy</label>
+        <div className="buy-btn" onChange={radioBtnCheck}>
+          <input
+            type="radio"
+            id="buy"
+            name="stockBtn"
+            value="Buy"
+            onClick={radioBtnCheck}
+            defaultChecked={radioBtns === "Buy"}
+          />
+          <label htmlFor="Buy">Buy</label>
         </div>
-        <div className="sell-btn">
-          <input type="radio" id="sell" name="Sell stock" value="text" />
-          <label>Sell</label>
+        <div className="sell-btn" onChange={radioBtnCheck}>
+          <input
+            type="radio"
+            id="sell"
+            name="stockBtn"
+            value="Sell"
+            onClick={radioBtnCheck}
+            defaultChecked={radioBtns === "Sell"}
+          />
+          <label htmlFor="Sell">Sell</label>
         </div>
       </div>
       <button type="submit" onClick={stockSubmit}>
-        Calculate
+        Submit
       </button>
     </div>
   );

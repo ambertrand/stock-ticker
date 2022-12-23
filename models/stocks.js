@@ -19,6 +19,7 @@ const stockSchema = new Schema({
   },
   buy: {
     type: Boolean,
+    required: true,
   },
 });
 
