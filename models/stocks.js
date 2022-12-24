@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const stockSchema = new Schema({
-  ticket: {
+  ticker: {
     type: String,
     required: true,
   },

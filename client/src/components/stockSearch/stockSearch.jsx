@@ -1,48 +1,45 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SearchBox from "../searchBox/searchBox";
+import "./stockSearch.styles.css";
 
 function Stock() {
-  // const apiKey = process.env.API_KEY;
-
   let searchFieldString = "";
-  // let testObj = {
-  //   ticket: "AL",
-  //   price: 10,
-  //   amount: 3,
-  //   total: 30,
-  //   buy: false,
-  // };
 
   const [stockTickers, setStockTickers] = useState();
   const [chosenStock, setChosenStock] = useState([]);
   const [purchasePrice, setPurchasePrice] = useState(0);
   const [radioBtns, setRadioBtns] = useState("Buy");
-  const [isBuyOrder, setIsBuyOrder] = useState();
+  const [isBuyOrder, setIsBuyOrder] = useState(true);
 
   useEffect(() => {
+    const apiKey = process.env.REACT_APP_API_KEY;
+
+    async function getStockTickers() {
+      try {
+        const response = await axios.get(
+          `https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=${apiKey}`
+        );
+        setStockTickers(response.data.tickers);
+      } catch (err) {
+        console.log("Stock Ticker error", err);
+      }
+    }
     getStockTickers();
   }, []);
 
-  async function getStockTickers() {
-    try {
-      const response = await axios.get(
-        "https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey=GqbklxOcTstEWTflxlxWpXWtnVj4IzjU"
-      );
-      setStockTickers(response.data.tickers);
-    } catch (err) {
-      console.log("Stock Ticker error", err);
-    }
-  }
-
   async function stockSubmit() {
-    await axios.post("http://localhost:3001/api/stocks", {
-      ticket: chosenStock[0].ticker,
-      price: chosenStock[0].day.c,
-      amount: purchasePrice,
-      total: purchasePrice * chosenStock[0].day.c,
-      buy: isBuyOrder,
-    });
+    try {
+      await axios.post("http://localhost:3001/api/stocks", {
+        ticker: chosenStock[0].ticker,
+        price: chosenStock[0].day.c,
+        amount: purchasePrice,
+        total: purchasePrice * chosenStock[0].day.c,
+        buy: isBuyOrder,
+      });
+    } catch {
+      window.alert("Make sure the ticker, price, and amount is selected.");
+    }
   }
 
   const onSearchChange = (e) => {
@@ -72,44 +69,62 @@ function Stock() {
         {chosenStock.length === 1 ? chosenStock[0].ticker : ""} <br />$
         {chosenStock.length === 1 ? chosenStock[0].day.c.toFixed(2) : "0"}
       </h2>
-      <SearchBox
-        className="stock-search"
-        placeholder="Search Stock"
-        onChangeHandler={onSearchChange}
-      />
-      <button type="submit" onClick={onSearch}>
-        Search Stock Price
-      </button>
-      <div className="amount-wrapper">
-        <div className="amount-btns">
-          <input type="search" placeholder="Amount" onChange={onAmountChange} />
-        </div>
-        <div className="buy-btn" onChange={radioBtnCheck}>
-          <input
-            type="radio"
-            id="buy"
-            name="stockBtn"
-            value="Buy"
-            onClick={radioBtnCheck}
-            defaultChecked={radioBtns === "Buy"}
-          />
-          <label htmlFor="Buy">Buy</label>
-        </div>
-        <div className="sell-btn" onChange={radioBtnCheck}>
-          <input
-            type="radio"
-            id="sell"
-            name="stockBtn"
-            value="Sell"
-            onClick={radioBtnCheck}
-            defaultChecked={radioBtns === "Sell"}
-          />
-          <label htmlFor="Sell">Sell</label>
-        </div>
+      <div className="search-wrapper">
+        <SearchBox
+          id="ticker-input"
+          className="stock-search"
+          placeholder="Search Stock"
+          onChangeHandler={onSearchChange}
+        />
+        <button
+          type="submit"
+          id="stock-btn"
+          className="stock-btn"
+          onClick={onSearch}
+        >
+          Search Stock Price
+        </button>
       </div>
-      <button type="submit" onClick={stockSubmit}>
-        Submit
-      </button>
+      {chosenStock.length === 1 && (
+        <>
+          <div className="amount-wrapper">
+            <div className="amount-btns">
+              <input
+                type="search"
+                id="amount-input"
+                className="amount-input"
+                placeholder="Amount"
+                onChange={onAmountChange}
+              />
+            </div>
+            <div className="buy-btn" onChange={radioBtnCheck}>
+              <input
+                type="radio"
+                id="buy"
+                name="stockBtn"
+                value="Buy"
+                onClick={radioBtnCheck}
+                defaultChecked={radioBtns === "Buy"}
+              />
+              <label htmlFor="Buy">Buy</label>
+            </div>
+            <div className="sell-btn" onChange={radioBtnCheck}>
+              <input
+                type="radio"
+                id="sell"
+                name="stockBtn"
+                value="Sell"
+                onClick={radioBtnCheck}
+                defaultChecked={radioBtns === "Sell"}
+              />
+              <label htmlFor="Sell">Sell</label>
+            </div>
+          </div>
+          <button type="submit" className="submit-btn" onClick={stockSubmit}>
+            Submit
+          </button>
+        </>
+      )}
     </div>
   );
 }
