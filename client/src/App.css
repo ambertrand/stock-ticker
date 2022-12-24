@@ -4,35 +4,15 @@
   box-sizing: border-box;
   font-family: "Muli", "sans-serif";
   text-align: center;
+  background-color: #ccc;
+  color: #000;
 }
 
-.stock-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+h1 {
+  margin-top: 16px;
 }
 
-.radio-wrapper {
-  margin: 16px;
-}
-
-.amount-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.amount-btns {
-  margin-right: 16px;
-}
-
-.buy-btn,
-.sell-btn {
-  margin: 8px;
-}
-
-.buy-btn input,
-.sell-btn input {
-  margin-right: 8px;
+p {
+  width: 500px;
+  margin: 0 auto;
 }
