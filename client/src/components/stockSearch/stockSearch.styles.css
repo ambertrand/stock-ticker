@@ -1,0 +1,77 @@
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stock-search {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 8px;
+  margin: 8px;
+}
+
+.stock-search::placeholder {
+  color: #000;
+}
+
+.stock-btn {
+  border: none;
+  outline: none;
+  padding: 8px;
+  margin-left: 8px;
+  border-radius: 4px;
+  border: 1px solid #000;
+  color: #000;
+  background-color: #fff;
+}
+
+.stock-btn:hover,
+.stock-btn:focus {
+  background-color: #f4f4f4;
+}
+
+.amount-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.amount-input {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 8px;
+  margin: 8px;
+}
+
+.amount-input::placeholder {
+  color: #000;
+}
+
+.buy-btn,
+.sell-btn {
+  margin: 8px;
+}
+
+.buy-btn input,
+.sell-btn input {
+  margin-right: 8px;
+}
+
+.submit-btn {
+  border: none;
+  outline: none;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #000;
+  color: #000;
+  background-color: #fff;
+  max-width: 150px;
+  width: 100%;
+}
+
+.submit-btn:hover,
+.submit-btn:focus {
+  background-color: #f4f4f4;
+}

@@ -1,0 +1,18 @@
+.container {
+  text-align: center;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-container {
+  margin: 16px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0px 6px 12px #f2f2f2;
+}
